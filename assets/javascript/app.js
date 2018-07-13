@@ -1,50 +1,58 @@
 $( document ).ready(function() {
 
-// Create a header element to the dom
-$("body").append("<header>")
 // Add header text "Giphy's all over the world yo!"
-$("header").append("<h1>Giphy's all over the world yo!</h1>");
-
-
-// Create the main section of the body
-$("body").append("<section>");
+$("#bodyHeader").append("<h1>Giphy's all over the world yo!</h1>");
 
 
 // Create a div/span for displaying buttons
-var headerDivButtons = ("<div>");
-$(headerDivButtons).attr("id", "headerRowButtons");
-$("section").append(headerDivButtons);
+var headerDivButtons = $("<div>");
+headerDivButtons.attr("id", "sectionRowButtons");
+$("#mainSection").append(headerDivButtons);
 
 
 // Create a div/span for displaying gifs
-var sectionDivGifs = ("<div>");
-$(sectionDivGifs).attr("id", "displayGifs")
-$("section").append(sectionDivGifs);
+var sectionDivGifs = $("<div>");
+sectionDivGifs.attr("id", "displayGifs");
+$("#mainSection").append(sectionDivGifs);
 
 
 // Create an input field for adding new gifs
 var userSubmitGif = $("<form>");
-$(userSubmitGif).attr("id", "userSubmitGif")
-$(userSubmitGif).append(`<input type="text" name="countryInput" value="">`);
-$(userSubmitGif).append(`<input type="submit" value="Submit">`);
-$("section").append(userSubmitGif);
+userSubmitGif.attr({id: "userSubmitGif"})
+userSubmitGif.append(`<input type="text" id="countryTextField" name="countryInput">`);
+userSubmitGif.append(`<input type="button" id="countrySubmitButton" value="Submit">`);
+$("#mainSection").append(userSubmitGif);
 
 
 // A storage place for holding country names for buttons which show the Gifs
-var arrayCountries = ["America", "Italy", "Canada", "Spain", "Scotland", "China", "Japan", "Russia", "South Africa", "Argentina"]
+var arrayCountries = ["America", "Italy", "Canada", "Spain", "Scotland", "China", "Japan", "Russia", "South Africa", "Argentina"];
 
 
 // Create a series of buttons for different countries from the stored array arrayCountries
 arrayCountries.forEach(function(country) {
-    var sectionGifsButton = $("<button>");
-    sectionGifsButton.attr("id", country + "-button");
-    $("#sectionDivGifs").append(sectionGifsButton);
+    $("#sectionRowButtons").append("<button id=" + country.toLocaleLowerCase().replace(/\s/g, '') + "-button class=buttonCountry data-country=" + country.toLocaleLowerCase().replace(/\s/g, '') + ">" + country + "</button>")
 });
 
 
-// Variable for the user's input in userSubmitGif for passing their value to a new button
-var userInputCountry = $("#userSubmitGif").val();
 
+// Variable for the user's input in userSubmitGif for passing their value to a new button
+$(document).on("click", "#countrySubmitButton", function() {
+    var userInputCountry = $("#countryTextField").val().trim();
+    $("#sectionRowButtons").append("<button id=" + userInputCountry.toLocaleLowerCase().replace(/\s/g, '') + "-button class=buttonCountry data-country=" + userInputCountry.toLocaleLowerCase().replace(/\s/g, '') + ">" + userInputCountry + "</button>")
+    arrayCountries.push(userInputCountry);
+    console.log("user's country ", userInputCountry);
+    console.log("country array ", arrayCountries.length, arrayCountries);
+});
+
+
+
+$(document).on("click", ".buttonCountry", function() {
+
+// Clear the previous gifs from #displayGifs for the next batch
+$("#displayGifs").empty();
+
+// Capture the name of the country to provide the query search
+var buttonCountryName = $(this).attr("data-country");
 
 // Ajax api call to Giphy
 // Variable for Giphy's api url
@@ -52,7 +60,7 @@ var userInputCountry = $("#userSubmitGif").val();
     var queryUrl = "https://api.giphy.com/v1/gifs/search" + 
                     "?api_key=RCrSzACA9PUFcbZbtODIgv9GmqCQYPoG" + 
                     // Wrong - should take the value from a button
-                    "&q=" + userInputCountry + 
+                    "&q=" + buttonCountryName + 
                     "&limit=10" + 
                     "&offset=0" + 
                     "&rating=G" + 
@@ -64,11 +72,17 @@ $.ajax({
     method: "GET"
   })
     .then(function(response) {
-        console.log(response);
+        var giphyResults = response.data;
+        console.log(giphyResults.length);
 
-        // display Gifs to #sectionDivGifs 
-    })
-
+        // display Gifs to #sectionDivGifs
+        for (a=0; a < giphyResults.length; a++) {
+            var giphyImage = $("<img>");
+            giphyImage.attr("src", giphyResults[a].images.fixed_height.url);
+            $("#displayGifs").append(giphyImage);
+        };
+    });
+}); // end of buttonCountry on-click-event
 
 
 }); // End of document.ready method
