@@ -60,6 +60,7 @@ var buttonCountryName = $(this).attr("data-country");
                     "&limit=10" + 
                     "&offset=0" + 
                     "&rating=G" + 
+                    "&rating=PG" +
                     "&lang=en";
 
 // Ajax api call to Giphy
@@ -69,13 +70,22 @@ $.ajax({
   })
     .then(function(response) {
         var giphyResults = response.data;
-        console.log(giphyResults.length);
 
         // display Gifs to #sectionDivGifs
         for (a=0; a < giphyResults.length; a++) {
+            var gifDiv = $("<div class='gifItem'>");
+
+            var rating = giphyResults[a].rating;
+
+            var p = $("<p>").text("Rating: " + rating);
+
             var giphyImage = $("<img>");
             giphyImage.attr("src", giphyResults[a].images.fixed_height.url);
-            $("#displayGifs").append(giphyImage);
+
+            gifDiv.append(p);
+            gifDiv.append(giphyImage);
+
+            $("#displayGifs").append(gifDiv);
         };
     });
 }); // end of buttonCountry on-click-event

@@ -6,7 +6,8 @@ body header#bodyHeader {
 
 
 body header#bodyHeader h1 {
-    color: red;
+    color: rgb(88, 202, 88);
+    font-weight: bold;
 }
 
 body header div#submitButton {
@@ -14,8 +15,8 @@ body header div#submitButton {
 }
 
 #countryTextField {
-margin-right: .5rem;
-font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+    margin-right: .5rem;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
 }
 
 body header#bodyHeader div#sectionRowButtons {
@@ -34,9 +35,30 @@ body header#bodyHeader div#sectionRowButtons {
     margin-bottom: 1rem;
 }
 
-section#mainSection div#displayGifs img {
+section#mainSection div#displayGifs div.gifItem {
     margin-right: .4rem;
     margin-left: .4rem;
+    max-width: 200px;
+    height: 250px;
+    float: left;
+}
+
+section#mainSection div#displayGifs  div.gifItem:nth-child(odd) {
+    border-top: solid 1px black;
+}
+
+section#mainSection div#displayGifs  div.gifItem:nth-child(even) {
+    border-top: dashed 1px black;
+}
+
+section#mainSection div#displayGifs div.gifItem p {
+    max-width: 200px;
+    font-weight: bold;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+section#mainSection div#displayGifs div.gifItem img {
     max-width: 200px;
 }
 
