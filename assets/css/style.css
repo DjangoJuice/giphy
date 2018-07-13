@@ -48,3 +48,15 @@ section#mainSection div#displayGifs img {
         margin-bottom: 2rem;
     }
 }
+
+@media only screen and (max-width: 1279px) {
+    body header#bodyHeader {
+        background: radial-gradient(blue, white, white);
+        height: 300px;
+        margin-bottom: 2rem;
+    }
+
+    body header#bodyHeader h1 {
+        color: maroon;
+    }
+}
